@@ -5,6 +5,6 @@ export interface Part {
   nextPart: Part | null;
   x: number;
   y: number;
-  draw: (ctx: CanvasContext) => void;
+  draw(ctx: CanvasContext): void;
   update: () => void;
 }
