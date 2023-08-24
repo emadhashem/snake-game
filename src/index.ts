@@ -10,7 +10,11 @@ const ctx = canvas.getContext("2d")!;
 const game = new Game(canvas.width, canvas.height, ctx);
 
 function animate(timeStamp: number) {
-  requestAnimationFrame(animate);
+  setTimeout(() => {
+    if (!game.gameOver) {
+      requestAnimationFrame(animate);
+    }
+  }, 1000 / 45);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   game.draw();
   game.update();

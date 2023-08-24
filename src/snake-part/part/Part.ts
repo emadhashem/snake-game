@@ -7,4 +7,6 @@ export interface Part {
   y: number;
   draw(ctx: CanvasContext): void;
   update: () => void;
+  w: number;
+  h: number;
 }
