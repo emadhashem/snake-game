@@ -5,6 +5,7 @@ import { Part } from "../snake-part/part/Part";
 import { Snake } from "../snake/Snake";
 import { CanvasContext, Rectangle } from "../types";
 import { makeRect } from "../helper";
+import { GameOver } from "../GameOver/GameOver";
 
 export class Game {
   food: Food;
@@ -12,7 +13,7 @@ export class Game {
   gameInputHandler: GameInputHandler;
   snake: Snake;
   score = 0;
-  gameOver = false;
+  gameOver: GameOver | null = null;
 
   constructor(
     public width: number,
@@ -23,26 +24,11 @@ export class Game {
       Math.random() * this.width,
       Math.random() * this.height,
       this,
-      5
+      18,
+      18
     );
     this.gameInputHandler = new GameInputHandler(this);
     this.snake = new Snake(width / 2, height / 2, this, 5, 5, 15, 15);
-  }
-
-  checkForOverlap() {
-    const xn = Math.max(
-      this.snake.x,
-      Math.min(this.food.x, this.snake.x + this.snake.w)
-    );
-    const yn = Math.max(
-      this.snake.y,
-      Math.min(this.food.y, this.snake.y + this.snake.h)
-    );
-
-    const dx = xn - this.food.x;
-    const dy = yn - this.food.y;
-
-    return dx * dx + dy * dy < this.food.r;
   }
 
   addNewPart() {
@@ -89,6 +75,23 @@ export class Game {
     }
   }
 
+  updateTailImg() {
+    if (this.snake.tail) {
+      if (this.snake.direction === 2 || this.snake.direction === 0) {
+        this.snake.tail.partImg.src = "../../imgs/snake-tail-up.png";
+      }
+      if (this.snake.direction === 4) {
+        this.snake.tail.partImg.src = "../../imgs/snake-tail-down.png";
+      }
+      if (this.snake.direction === 1) {
+        this.snake.tail.partImg.src = "../../imgs/snake-tail-left.png";
+      }
+      if (this.snake.direction === 3) {
+        this.snake.tail.partImg.src = "../../imgs/snake-tail-right.png";
+      }
+    }
+  }
+
   drawSnakeParts(part: Part | null) {
     if (part) {
       part.draw(this.ctx);
@@ -101,14 +104,22 @@ export class Game {
     this.snake.draw(this.ctx);
     this.drawSnakeParts(this.snake.nextPart);
 
-    if (this.checkIfSnakePartsOverlap(this.snake.nextPart))
-      this.gameOver = true;
+    if (this.checkIfSnakePartsOverlap(this.snake.nextPart)) {
+      this.gameOver = new GameOver(
+        this.width / 2,
+        this.height / 2,
+        this,
+        "Game over"
+      );
+      this.gameOver.draw(this.ctx);
+    }
   }
 
   update() {
     this.snake.update();
     this.updateSnakeParts(this.snake.tail);
-    if (this.checkForOverlap()) {
+    this.updateTailImg();
+    if (this.checkIf2RectOverlap(makeRect(this.snake), makeRect(this.food))) {
       this.score++;
       this.food.update();
       if (this.score % 1 === 0) {

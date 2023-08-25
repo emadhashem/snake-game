@@ -6,17 +6,17 @@ export class SnakePart extends Particle implements Part {
   prevPart: Part | null = null;
   nextPart: Part | null = null;
 
+  partImg = new Image();
+
   constructor(x: number, y: number, game: Game) {
     super(x, y, game);
+    this.partImg.src = "../../imgs/snake-part.png";
   }
   w: number = 15;
   h: number = 15;
 
   draw(ctx: CanvasRenderingContext2D) {
-    ctx.beginPath();
-    ctx.fillStyle = "gray";
-    ctx.fillRect(this.x, this.y, this.w, this.h);
-    ctx.closePath();
+    ctx.drawImage(this.partImg, this.x, this.y, this.w, this.h);
   }
 
   update() {
@@ -24,16 +24,16 @@ export class SnakePart extends Particle implements Part {
       this.x = this.prevPart.x;
       this.y = this.prevPart.y;
       if (this.game.snake.direction === 2) {
-        this.y += 15;
+        this.y += 10;
       }
       if (this.game.snake.direction === 4) {
-        this.y -= 15;
+        this.y -= 10;
       }
       if (this.game.snake.direction === 1) {
-        this.x += 15;
+        this.x += 10;
       }
       if (this.game.snake.direction === 3) {
-        this.x -= 15;
+        this.x -= 10;
       }
     }
   }

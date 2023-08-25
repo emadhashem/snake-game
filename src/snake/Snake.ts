@@ -10,6 +10,7 @@ export class Snake extends Particle implements Part {
 
   tail: SnakePart | null = null;
   direction = 0;
+  headImg: HTMLImageElement = new Image();
 
   constructor(
     x: number,
@@ -21,26 +22,32 @@ export class Snake extends Particle implements Part {
     public h: number
   ) {
     super(x, y, game);
+    this.headImg.src = "../../imgs/snake-up.png";
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
-    ctx.fillStyle = "white";
-    ctx.fillRect(this.x, this.y, this.w, this.h);
+    // ctx.fillStyle = "white";
+    // ctx.fillRect(this.x, this.y, this.w, this.h);
+    ctx.drawImage(this.headImg, this.x, this.y, this.w, this.h);
   }
 
   update(): void {
     if (this.game.keys.includes(SnakeInput.up)) {
       this.y -= this.speedY;
       this.direction = 2;
+      this.headImg.src = "../../imgs/snake-up.png";
     } else if (this.game.keys.includes(SnakeInput.down)) {
       this.y += this.speedY;
       this.direction = 4;
+      this.headImg.src = "../../imgs/snake-down.png";
     } else if (this.game.keys.includes(SnakeInput.left)) {
       this.x -= this.speedX;
       this.direction = 1;
+      this.headImg.src = "../../imgs/snake-left.png";
     } else if (this.game.keys.includes(SnakeInput.right)) {
       this.x += this.speedX;
       this.direction = 3;
+      this.headImg.src = "../../imgs/snake-right.png";
     }
 
     if (this.x > this.game.width) this.x = 0;
