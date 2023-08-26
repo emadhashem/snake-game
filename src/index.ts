@@ -21,3 +21,4 @@ function animate(timeStamp: number) {
 }
 
 animate(0);
+

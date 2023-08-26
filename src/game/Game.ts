@@ -40,7 +40,10 @@ export class Game {
       );
       newPart.prevPart = this.snake.tail;
       this.snake.tail.nextPart = newPart;
-      this.snake.tail = newPart;
+      this.snake.tail = this.snake.tail.nextPart;
+      this.snake.tail.nextPart = null;
+      this.snake.tail.prevPart!.partImg.src = "../../imgs/snake-part.png";
+      
     } else {
       const newPart = new SnakePart(this.snake.x + 15, this.snake.y, this);
       this.snake.nextPart = this.snake.tail = newPart;
@@ -54,6 +57,22 @@ export class Game {
     if (rec1.y2 <= rec2.y1 || rec2.y2 <= rec1.y1) return false;
 
     return true;
+  }
+
+  updateTailImg() {
+    if (!this.snake.tail) return;
+    if (this.snake.direction === 2 || this.snake.direction === 0) {
+      this.snake.tail.partImg.src = "../../imgs/snake-tail-up.png";
+    }
+    if (this.snake.direction === 4) {
+      this.snake.tail.partImg.src = "../../imgs/snake-tail-down.png";
+    }
+    if (this.snake.direction === 1) {
+      this.snake.tail.partImg.src = "../../imgs/snake-tail-left.png";
+    }
+    if (this.snake.direction === 3) {
+      this.snake.tail.partImg.src = "../../imgs/snake-tail-right.png";
+    }
   }
 
   checkIfSnakePartsOverlap(part: Part | null): boolean {
@@ -72,23 +91,6 @@ export class Game {
     if (part && part.prevPart) {
       part.update();
       this.updateSnakeParts(part.prevPart);
-    }
-  }
-
-  updateTailImg() {
-    if (this.snake.tail) {
-      if (this.snake.direction === 2 || this.snake.direction === 0) {
-        this.snake.tail.partImg.src = "../../imgs/snake-tail-up.png";
-      }
-      if (this.snake.direction === 4) {
-        this.snake.tail.partImg.src = "../../imgs/snake-tail-down.png";
-      }
-      if (this.snake.direction === 1) {
-        this.snake.tail.partImg.src = "../../imgs/snake-tail-left.png";
-      }
-      if (this.snake.direction === 3) {
-        this.snake.tail.partImg.src = "../../imgs/snake-tail-right.png";
-      }
     }
   }
 

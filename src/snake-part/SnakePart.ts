@@ -3,8 +3,8 @@ import { Particle } from "../particle/Particle";
 import { Part } from "./part/Part";
 
 export class SnakePart extends Particle implements Part {
-  prevPart: Part | null = null;
-  nextPart: Part | null = null;
+  prevPart: SnakePart | null = null;
+  nextPart: SnakePart | null = null;
 
   partImg = new Image();
 
@@ -30,10 +30,10 @@ export class SnakePart extends Particle implements Part {
         this.y -= 10;
       }
       if (this.game.snake.direction === 1) {
-        this.x += 10;
+        this.x += 11;
       }
       if (this.game.snake.direction === 3) {
-        this.x -= 10;
+        this.x -= 11;
       }
     }
   }
